@@ -1,7 +1,11 @@
+import "module-alias/register";
+import "reflect-metadata";
 import { SecurityConfig } from "./config/SecurityConfig";
 import { ServerConfig } from "./config/ServerConfig";
-import express, { Router } from "express";
+import express from "express";
 import http from "http";
+import registerRoutes from "@infrastructure/entry-points/rest/routes/routes";
+import registerDependencies from "./DI/DependencyRegistration";
 
 export class Server {
   public app: express.Express;
@@ -19,11 +23,11 @@ export class Server {
   private configuration(): void {
     ServerConfig.setConfig(this.app);
     SecurityConfig.setConfig(this.app);
+    registerDependencies();
   }
 
   private routes(): void {
-    const router = Router();
-    this.app.use(router);
+    this.app.use("/api/v1", registerRoutes());
   }
 
   async listen(): Promise<void> {
@@ -38,7 +42,7 @@ export class Server {
 
   async stop(): Promise<void> {
     return new Promise((resolve, reject) => {
-      if (!this.httpServer) return;
+      if (!this.httpServer) return resolve();
       this.httpServer.close((err) => (err ? reject(err) : resolve()));
     });
   }

@@ -1,4 +1,6 @@
 import { Nullable } from "@shared/domain/type/Nullable";
+import { Response } from "express";
+import { Code } from "./Code";
 
 export class ApiResponse<T> {
   constructor(
@@ -8,15 +10,16 @@ export class ApiResponse<T> {
     readonly timestamp: Date = new Date(),
   ) {}
 
-  public static success<T>(message: string, data?: T) {
-    return new ApiResponse<T>(true, message, data);
+  static success<T>(res: Response, message: string, data?: T) {
+    const response = new ApiResponse<T>(true, message, data);
+    res.status(Code.SUCCESS.code).json(response);
   }
 
-  public static noContent() {
-    return null;
+  static noContent(res: Response) {
+    res.status(Code.NO_CONTENT.code);
   }
 
-  public static error<T>(message: string, data?: T) {
+  static error<T>(message: string, data?: T) {
     return new ApiResponse<T>(false, message, data);
   }
 }

@@ -5,11 +5,10 @@
     "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@shared/*": ["./src/shared/*"],
       "@domain/*": ["./src/domain/*"],
-      "@application/*": ["./src/application/*"],
-      "@infra/*": ["./src/infrastructure/*"],
-      "@bootloader/*": ["./bootloader/*"]
+      "@applications/*": ["./src/applications/*"],
+      "@infrastructure/*": ["./src/infrastructure/*"],
+      "@shared/*": ["./src/shared/*"]
     },
     "outDir": "./dist",
     "allowJs": true,
